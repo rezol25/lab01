@@ -5,3 +5,4 @@
 #define SAMPLE_PERIOD_MS 1000 // perioada de eșantionare (ms)
 #define SERIAL_BAUD 9600 // viteza portului serial
 #endif
+#define LED_PIN 13 // LED de stare ;
