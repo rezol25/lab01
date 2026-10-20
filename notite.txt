@@ -1,0 +1,1 @@
+echo "Idei: filtru median, alarmă prag"
