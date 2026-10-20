@@ -42,3 +42,6 @@ index e69de29..9d31008 100644
 ## Hardware
 
 Arduino Uno R3, senzor de temperatura TMP36
+
+
+echo "Platformă: Arduino Uno R3 (ATmega328P)" 
