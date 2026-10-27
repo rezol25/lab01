@@ -1,62 +1,41 @@
-## Autor 
-Farhat Dany
-Gr 1B
+# Sistem de achiziție și monitorizare a temperaturii (APD)
+Proiect de laborator pentru achiziția semnalelor analogice, filtrarea numerică și
+transmiterea datelor pe interfața serială UART.
 
-## Git status
+## 1. Arhitectura sistemului
 
-On branch main
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-        modified:   .gitignore
-        modified:   readme.md
+```mermaid
+flowchart LR
+TMP["Senzor TMP36"] -->|"V_out"| A0["Arduino Uno (A0)"]
+BTN["Buton Start/Stop"] -->|"D2"| A0
+A0 -->|"UART (CSV)"| HOST["PC / Serial Monitor"]
+```
 
-no changes added to commit (use "git add" and/or "git commit -a")
+## 2. Alocarea pinilor (Pinout)
 
-## Git diff
-
-diff --git a/.gitignore b/.gitignore
-index e69de29..6cbb645 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -0,0 +1,9 @@
-+# .gitignore – fișiere care nu se versionează
-+# Rezultate de compilare
-+build/
-+*.hex
-+*.o
-+# Jurnale
-+*.log
-+# Setări personale ale editorului
-+.vscode/
-diff --git a/readme.md b/readme.md
-index e69de29..9d31008 100644
---- a/readme.md
-+++ b/readme.md
-@@ -0,0 +1,3 @@
-+## Autor 
-+Farhat Dany
-+Gr 1B
-\ No newline at end of file
-
-## Hardware
-
-Arduino Uno R3, senzor de temperatura TMP36
+| Componentă | Pin Arduino | Configurație | Rol |
+| :--- | :---: | :---: | :--- |
+| Senzor TMP36 | `A0` | Intrare analogică | Măsurare temperatură |
+| Buton control | `D2` | `INPUT_PULLUP` | Activare / oprire eșantionare |
+| LED Stare | `D13` | `OUTPUT` | Semnalizare achiziție activă |
 
 
-Platformă: Arduino Uno R3 (ATmega328P)
+## 3. Relația de conversie
 
-Autor laborator: <Farhat Dany>
-
-## Parametri 
-
-config.h
-
-#define CONFIG_H
-#define SENSOR_PIN A0 // intrarea analogică a senzorului
-#define SAMPLE_PERIOD_MS 500 // perioada de eșantionare (ms)
-#define SERIAL_BAUD 19200 // viteza portului serial
-#define LED_PIN 13 // LED de stare
+Pentru senzorul TMP36 ($500\text{ mV}$ offset la $0^\circ\text{C}$, pantă $10\text{
+mV}/^\circ\text{C}$), temperatura în grade Celsius se calculează cu relația:
+$$T(^\circ\text{C}) = \left( \frac{D_{ADC} \cdot 5.0}{1023.0} - 0.5 \right) \cdot 100$$
 
 
-Comunicatie seriala la 115200 bau ( rapida ), aceasta va fii pastratata insa este suportata si cea de 19200 baud ( compatibila )
+## 4. Formatul datelor transmise (CSV)
+
+```text
+timestamp_ms,raw_adc,voltage_v,temp_c
+1000,153,0.75,24.78
+2000,155,0.76,25.76
+```
+
+## 5. Checklist verificare
+- [x] Configurare repository și `.gitignore`
+- [x] Redactare specificație hardware în Markdown
+- [ ] Simulare circuit în Tinkercad Circuits
